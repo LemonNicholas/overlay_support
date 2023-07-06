@@ -18,6 +18,7 @@ OverlaySupportEntry showOverlayNotification(
   Key? key,
   NotificationPosition position = NotificationPosition.top,
   BuildContext? context,
+  EdgeInsetsGeometry? margin = null,
 }) {
   if (duration == null) {
     duration = kNotificationDuration;
@@ -38,6 +39,7 @@ OverlaySupportEntry showOverlayNotification(
     duration: duration,
     key: key,
     context: context,
+    margin: margin,
   );
 }
 
@@ -93,7 +95,7 @@ OverlaySupportEntry showSimpleNotification(
    * The direction in which the notification can be dismissed.
    */
   DismissDirection? slideDismissDirection = null,
-      EdgeInsetsGeometry? margin = null,
+  EdgeInsetsGeometry? margin = null,
 }) {
   final dismissDirection = slideDismissDirection != null
       ? slideDismissDirection
@@ -102,29 +104,26 @@ OverlaySupportEntry showSimpleNotification(
           : DismissDirection.none;
   final entry = showOverlayNotification(
     (context) {
-      return Container(
-        margin: margin,
-        child: SlideDismissible(
-          direction: dismissDirection,
-          key: ValueKey(key),
-          child: Material(
-            color: background ?? Theme.of(context).accentColor,
-            elevation: elevation,
-            child: SafeArea(
-                bottom: position == NotificationPosition.bottom,
-                top: position == NotificationPosition.top,
-                child: ListTileTheme(
-                  textColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
-                  iconColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
-                  child: ListTile(
-                    leading: leading,
-                    title: content,
-                    subtitle: subtitle,
-                    trailing: trailing,
-                    contentPadding: contentPadding,
-                  ),
-                )),
-          ),
+      return SlideDismissible(
+        direction: dismissDirection,
+        key: ValueKey(key),
+        child: Material(
+          color: background ?? Theme.of(context).accentColor,
+          elevation: elevation,
+          child: SafeArea(
+              bottom: position == NotificationPosition.bottom,
+              top: position == NotificationPosition.top,
+              child: ListTileTheme(
+                textColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
+                iconColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
+                child: ListTile(
+                  leading: leading,
+                  title: content,
+                  subtitle: subtitle,
+                  trailing: trailing,
+                  contentPadding: contentPadding,
+                ),
+              )),
         ),
       );
     },
@@ -132,6 +131,7 @@ OverlaySupportEntry showSimpleNotification(
     key: key,
     position: position,
     context: context,
+    margin: margin,
   );
   return entry;
 }

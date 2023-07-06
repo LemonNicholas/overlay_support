@@ -10,6 +10,7 @@ import 'overlay_keys.dart';
 import 'overlay_state_finder.dart';
 
 part 'overlay_animation.dart';
+
 part 'overlay_entry.dart';
 
 /// To build a widget with animated value.
@@ -55,6 +56,7 @@ OverlaySupportEntry showOverlay(
   BuildContext? context,
   Duration? animationDuration,
   Duration? reverseAnimationDuration,
+  EdgeInsetsGeometry? margin = null,
 }) {
   assert(key is! GlobalKey);
 
@@ -83,17 +85,23 @@ OverlaySupportEntry showOverlay(
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
   final OverlayEntry entry = OverlayEntry(builder: (context) {
-    return KeyedOverlay(
-      key: overlayKey,
-      child: _AnimatedOverlay(
-        key: stateKey,
-        builder: builder,
-        curve: curve,
-        animationDuration: animationDuration ?? kNotificationSlideDuration,
-        reverseAnimationDuration: reverseAnimationDuration ?? kNotificationSlideDuration,
-        duration: duration ?? kNotificationDuration,
-        overlayKey: overlayKey,
-        overlaySupportState: overlaySupport,
+    return Container(
+      margin: margin,
+      child: KeyedOverlay(
+        key: overlayKey,
+        child: IgnorePointer(
+            ignoring: true,
+            child: _AnimatedOverlay(
+              key: stateKey,
+              builder: builder,
+              curve: curve,
+              animationDuration: animationDuration ?? kNotificationSlideDuration,
+              reverseAnimationDuration:
+              reverseAnimationDuration ?? kNotificationSlideDuration,
+              duration: duration ?? kNotificationDuration,
+              overlayKey: overlayKey,
+              overlaySupportState: overlaySupport,
+            )),
       ),
     );
   });
