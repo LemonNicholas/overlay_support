@@ -58,7 +58,9 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
         _controller.status == AnimationStatus.forward) {
       await _controller.forward(from: _controller.value);
     }
-    unawaited(_autoHideOperation?.cancel());
+    if(_autoHideOperation!=null){
+      unawaited(_autoHideOperation!.cancel());
+    }
     await _controller.reverse(from: _controller.value);
   }
 

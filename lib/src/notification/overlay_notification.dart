@@ -26,6 +26,7 @@ OverlaySupportEntry showOverlayNotification(
   Key? key,
   NotificationPosition position = NotificationPosition.top,
   BuildContext? context,
+  EdgeInsetsGeometry? margin = null,
 }) {
   duration ??= kNotificationDuration;
   animationDuration ??= kNotificationSlideDuration;
@@ -50,6 +51,7 @@ OverlaySupportEntry showOverlayNotification(
     reverseAnimationDuration: reverseAnimationDuration,
     key: key,
     context: context,
+    margin:margin,
   );
 }
 
@@ -107,9 +109,9 @@ OverlaySupportEntry showSimpleNotification(
    * The direction in which the notification can be dismissed.
    */
   DismissDirection? slideDismissDirection,
+  EdgeInsetsGeometry? margin = null,
 }) {
-  final dismissDirection = slideDismissDirection ??
-      (slideDismiss ? DismissDirection.horizontal : DismissDirection.none);
+  final dismissDirection = slideDismissDirection ?? (slideDismiss ? DismissDirection.horizontal : DismissDirection.none);
   final entry = showOverlayNotification(
     (context) {
       return SlideDismissible(
@@ -122,10 +124,8 @@ OverlaySupportEntry showSimpleNotification(
               bottom: position == NotificationPosition.bottom,
               top: position == NotificationPosition.top,
               child: ListTileTheme(
-                textColor:
-                    foreground ?? Theme.of(context).colorScheme.onSecondary,
-                iconColor:
-                    foreground ?? Theme.of(context).colorScheme.onSecondary,
+                textColor: foreground ?? Theme.of(context).colorScheme.onSecondary,
+                iconColor: foreground ?? Theme.of(context).colorScheme.onSecondary,
                 child: ListTile(
                   leading: leading,
                   title: content,
@@ -143,6 +143,7 @@ OverlaySupportEntry showSimpleNotification(
     key: key,
     position: position,
     context: context,
+    margin: margin,
   );
   return entry;
 }

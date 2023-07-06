@@ -18,8 +18,7 @@ part 'overlay_entry.dart';
 ///
 /// A simple use case is [TopSlideNotification] in [showOverlayNotification].
 ///
-typedef AnimatedOverlayWidgetBuilder = Widget Function(
-    BuildContext context, double progress);
+typedef AnimatedOverlayWidgetBuilder = Widget Function(BuildContext context, double progress);
 
 /// Basic api to show overlay widget.
 ///
@@ -57,6 +56,7 @@ OverlaySupportEntry showOverlay(
   BuildContext? context,
   Duration? animationDuration,
   Duration? reverseAnimationDuration,
+  EdgeInsetsGeometry? margin = null,
 }) {
   assert(key is! GlobalKey);
 
@@ -85,23 +85,27 @@ OverlaySupportEntry showOverlay(
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
   final entry = OverlayEntry(builder: (context) {
-    return KeyedOverlay(
-      key: overlayKey,
-      child: _AnimatedOverlay(
-        key: stateKey,
-        builder: builder,
-        curve: curve,
-        animationDuration: animationDuration ?? kNotificationSlideDuration,
-        reverseAnimationDuration:
-            reverseAnimationDuration ?? kNotificationSlideDuration,
-        duration: duration ?? kNotificationDuration,
-        overlayKey: overlayKey,
-        overlaySupportState: overlaySupport,
+    return Container(
+      margin: margin,
+      child: KeyedOverlay(
+        key: overlayKey,
+        child: IgnorePointer(
+            ignoring: true,
+            child: _AnimatedOverlay(
+              key: stateKey,
+              builder: builder,
+              curve: curve,
+              animationDuration: animationDuration ?? kNotificationSlideDuration,
+              reverseAnimationDuration:
+              reverseAnimationDuration ?? kNotificationSlideDuration,
+              duration: duration ?? kNotificationDuration,
+              overlayKey: overlayKey,
+              overlaySupportState: overlaySupport,
+            )),
       ),
     );
   });
-  final supportEntry = OverlaySupportEntry._internal(
-      entry, overlayKey, stateKey, overlaySupport);
+  final supportEntry = OverlaySupportEntry._internal(entry, overlayKey, stateKey, overlaySupport);
   overlaySupport.addEntry(supportEntry, key: overlayKey);
   overlay.insert(entry);
   return supportEntry;
