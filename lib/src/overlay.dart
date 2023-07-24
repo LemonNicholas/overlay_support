@@ -57,6 +57,7 @@ OverlaySupportEntry showOverlay(
   Duration? animationDuration,
   Duration? reverseAnimationDuration,
   EdgeInsetsGeometry? margin = null,
+      bool ignoreClick  = true,
 }) {
   assert(key is! GlobalKey);
 
@@ -90,7 +91,7 @@ OverlaySupportEntry showOverlay(
       child: KeyedOverlay(
         key: overlayKey,
         child: IgnorePointer(
-            ignoring: true,
+            ignoring: ignoreClick,
             child: _AnimatedOverlay(
               key: stateKey,
               builder: builder,
@@ -110,3 +111,17 @@ OverlaySupportEntry showOverlay(
   overlay.insert(entry);
   return supportEntry;
 }
+
+void dismissOverlayDialog({BuildContext? context,required Key key}){
+  assert(key is! GlobalKey);
+
+  final overlaySupport = findOverlayState(context: context);
+  final overlay = overlaySupport?.overlayState;
+  if (overlaySupport == null || overlay == null) {
+    return;
+  }
+
+  final oldSupportEntry = overlaySupport.getEntry(key: key);
+  oldSupportEntry?.dismiss(animate: true);
+}
+

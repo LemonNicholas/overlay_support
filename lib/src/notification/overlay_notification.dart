@@ -27,6 +27,7 @@ OverlaySupportEntry showOverlayNotification(
   NotificationPosition position = NotificationPosition.top,
   BuildContext? context,
   EdgeInsetsGeometry? margin = null,
+  bool ignoreClick = true,
 }) {
   duration ??= kNotificationDuration;
   animationDuration ??= kNotificationSlideDuration;
@@ -52,6 +53,7 @@ OverlaySupportEntry showOverlayNotification(
     key: key,
     context: context,
     margin:margin,
+    ignoreClick: ignoreClick,
   );
 }
 
@@ -110,6 +112,7 @@ OverlaySupportEntry showSimpleNotification(
    */
   DismissDirection? slideDismissDirection,
   EdgeInsetsGeometry? margin = null,
+      bool ignoreClick = true,
 }) {
   final dismissDirection = slideDismissDirection ?? (slideDismiss ? DismissDirection.horizontal : DismissDirection.none);
   final entry = showOverlayNotification(
@@ -144,6 +147,7 @@ OverlaySupportEntry showSimpleNotification(
     position: position,
     context: context,
     margin: margin,
+    ignoreClick: ignoreClick,
   );
   return entry;
 }
